@@ -5,12 +5,6 @@ from controller import categoryController
 
 
 app=create_app()
-# app.add_url_rule('/test',)
-
-@app.route("/",methods=["DELETE"])
-def hello_world():
-    categories= categoryController.getAll()
-    return categories
 
 def main():
     app.run(debug=True)
