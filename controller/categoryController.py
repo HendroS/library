@@ -4,7 +4,7 @@ from . import db
 categories= Category()
 
 def getById(id:int):
-    result=categories.query.filter_by(kategori_id=id).first()
+    result=categories.query.filter_by(kategori_id=id).first_or_404()
     
     return {
         "deskripsi_id":result.kategori_id,
@@ -26,7 +26,7 @@ def deleteById(id):
         db.session.commit()
     except Exception as e:
         print(e)
-        return {"message":"update failed"},400
+        return {"message":"delete failed"},400
     return {
             "message":'Delete success'
         }

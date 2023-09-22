@@ -11,6 +11,7 @@ author_book= db.Table('penulis_buku',
 from .authorModel import Author
 from .categoryModel import Category
 from .bookModel import Book
+from .userModel import User
 
 
 
