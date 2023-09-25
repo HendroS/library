@@ -1,17 +1,21 @@
 from . import blueprint
-from controller import categoryController
-from flask import request
+from controller import categoryController,Auth
+from flask import request,g
 
 @blueprint.route("/category", methods=['GET','POST'])
 @blueprint.route("/category/<int:id>", methods=['GET',"DELETE","PUT"])
 def category(id=None):
     method=request.method
+    g.auth.setAuthorization(['admin','member'])
     if method=="GET":
         if id==None:
             category=categoryController.getAll()
         else:
             category=categoryController.getById(id)
         return category
+    
+    g.auth.setAuthorization(['admin'])
+
     if method=="DELETE":
         result= categoryController.deleteById(id)
         return result

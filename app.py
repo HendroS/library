@@ -16,9 +16,14 @@ load_dotenv()
 def create_app():
     app = Flask(__name__)
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DB_URI_PERPUSTAKAAN')
-
     db.init_app(app)
+
+    # with app.app_context():
+    #     print('coba aja test')
+
     app.register_blueprint(blueprint)
+
+
 
     return app
   

@@ -1,5 +1,5 @@
 from models import User
-from . import db
+from . import db,Auth
 import bcrypt
 
 users=User()

@@ -1,11 +1,13 @@
 from . import blueprint
-from controller import authorController
-from flask import request
+from controller import authorController,Auth
+from flask import request,g
 
 @blueprint.route("/author", methods=['GET','POST'])
 @blueprint.route("/author/<int:id>", methods=['GET',"DELETE","PUT"])
 def author(id=None):
     method=request.method
+    
+    g.auth.setAuthorization(['admin','member'])
     if method=="GET":
         if id==None:
             author=authorController.getAll()
@@ -13,6 +15,7 @@ def author(id=None):
             author=authorController.getById(id)
         return author
     
+    g.auth.setAuthorization['admin']
     if method=="DELETE":
         result= authorController.deleteById(id)
         return result

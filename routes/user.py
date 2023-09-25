@@ -1,18 +1,23 @@
 from . import blueprint
-from controller import userController
-from flask import request
+from controller import userController,Auth
+from flask import request,g
 
 @blueprint.route("/user", methods=['GET','POST'])
 @blueprint.route("/user/<int:id>", methods=['GET',"DELETE","PUT"])
 def user(id=None):
     method=request.method
-    print(method)
+    g.auth.setAuthorization(['member','admin'])
 
+    if method=="PUT":
+        data=request.get_json()
+        result =userController.update(id=id,username=data["username"],password=data["password"])
+        return result
+    
+    g.auth.setAuthorization(['admin'])
     if method=='GET':
         if id==None:
             user=userController.getAll()
         else:
-            print('userroute')
             user=userController.getById(id)
         return user
     if method=='POST':
@@ -23,9 +28,5 @@ def user(id=None):
         return result
     if method=='DELETE':
         result=userController.deleteById(id)
-        return "result"
-    
-    if method=="PUT":
-        data=request.get_json()
-        result =userController.update(id=id,username=data["username"],password=data["password"])
-        return result
+        return "result" 
+   

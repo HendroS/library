@@ -13,5 +13,10 @@ class Book(db.Model):
     
     authors = db.relationship('Author', secondary=author_book, lazy='subquery',
         backref=db.backref('books', lazy=True))
+    
+    peminjaman=db.relationship('DetailPinjaman')
+    
+    # peminjaman = db.relationship('Peminjaman', secondary=detail_pinjaman, lazy='subquery',
+    #     backref=db.backref('books', lazy=True))
     def __repr__(self):
         return f'<Book {self.judul}>'

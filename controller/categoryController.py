@@ -59,4 +59,4 @@ def update(id,nama,deskripsi):
         return {
                 "message":"update failed"},400
         
-    return {"message":f"update author id: {category.kategori_id} success"},200
+    return {"message":f"update category id: {category.kategori_id} success"},200
