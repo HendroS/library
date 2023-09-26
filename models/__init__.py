@@ -20,7 +20,7 @@ from .bookModel import Book
 from .userModel import User
 from .peminjamanModel import Peminjaman
 from .detailPinjamanModel import DetailPinjaman
-# from .pengembalianModel import Pengembalian
+from .pengembalianModel import Pengembalian
 
 
 

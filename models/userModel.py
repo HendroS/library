@@ -8,10 +8,10 @@ class User(db.Model):
     password:Mapped[str] = mapped_column(db.String(60), nullable=False)
     isadmin: Mapped[bool] = mapped_column(db.Boolean,nullable=False,default=True)
     peminjaman_members= relationship('Peminjaman',back_populates='member',foreign_keys='Peminjaman.user_id')
-    petugas=relationship('Peminjaman',back_populates='member',foreign_keys='Peminjaman.petugas_id')
+    petugas=relationship('Peminjaman',back_populates='petugas',foreign_keys='Peminjaman.petugas_id')
     # peminjaman_petugas= db.relationship('Peminjaman',back_populates='petugas',foreign_keys='peminjaman.petugas_id')
-  
-    # pengembalian= db.relationship('Pengembalian',backref='petugas',lazy=True)
+    
+    pengembalian_petugas= db.relationship('Pengembalian',backref='petugas',lazy=True)
 
     def __repr__(self):
         return f'<user {self.username}>'

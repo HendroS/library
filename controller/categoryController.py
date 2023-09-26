@@ -55,7 +55,7 @@ def update(id,nama,deskripsi):
         category.deskripsi= deskripsi
         db.session.commit()
     except Exception as e:
-        print(e.orig)
+        print(e)
         return {
                 "message":"update failed"},400
         

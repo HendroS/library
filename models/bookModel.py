@@ -1,6 +1,6 @@
 import datetime
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column,relationship
 from . import db,author_book
 
 class Book(db.Model):
@@ -13,8 +13,8 @@ class Book(db.Model):
     
     authors = db.relationship('Author', secondary=author_book, lazy='subquery',
         backref=db.backref('books', lazy=True))
-    
-    peminjaman=db.relationship('DetailPinjaman')
+    detail_pinjaman= db.relationship('DetailPinjaman',backref='book',lazy=True)
+    # detail_pinjaman=relationship('DetailPinjaman',back_populates="book")
     
     # peminjaman = db.relationship('Peminjaman', secondary=detail_pinjaman, lazy='subquery',
     #     backref=db.backref('books', lazy=True))

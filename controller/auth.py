@@ -1,6 +1,5 @@
 import bcrypt
 from flask import abort, request
-import base64
 from models import User
 
 
@@ -19,13 +18,13 @@ class Auth():
             password=credential.parameters['password']
             user=User().query.filter_by(username=username).first()
             if user!=None:
-                isMatch=bcrypt.checkpw(password.encode('utf8'),user.password.encode('utf-8'))
+                isMatch=bcrypt.checkpw(password.encode('utf-8'),user.password.encode('utf-8'))
                 if isMatch==True:
                     self.user={"username":user.username,
                                "role":"admin" if user.isadmin ==True else "member"}
-                else:
-                    print("wrong pass")
-            else:print ('not registered')
+            #     else:
+            #         print("wrong pass")
+            # else:print ('not registered')
     
     def setAuthorization(self,roles:[str]=[]):
         if self.user!=None:
