@@ -8,6 +8,7 @@ def pengembalian(id=None):
     method=request.method
     if method=="GET":
         if id==None:
+            
             result = pengembalianController.getAll()
         else:
             result = pengembalianController.getById(id)

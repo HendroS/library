@@ -3,8 +3,17 @@ from . import db
 
 peminjaman = Peminjaman()
 
-def getAll():
+def getAll(dikembalikan=None):
     result = peminjaman.query.all()
+    if dikembalikan=='false':
+        temp=list(filter(lambda p: (p.pengembalian==None), result))
+        result=temp
+    elif dikembalikan=='true':
+        temp=list(filter(lambda p: (p.pengembalian!=None), result))
+        result=temp
+    
+        # for r in result:
+        #     print(r.pengembalian)
     # for x in result:
     #     print('nama petugas:',x.petugas.username)
     #     print('nama member:',x.member.username)
@@ -57,6 +66,7 @@ def getById(id):
         ]
         }}
 
+#bagaimana bila dihapus?
 def deleteById(id):
     result = peminjaman.query.filter_by(peminjaman_id=id).first_or_404()
 
@@ -89,11 +99,16 @@ def create(petugas_id,user_id,tgl_kembali,keterangan,books):
             b=Book().query.filter_by(buku_id=book["buku_id"]).first()
             if b==None:
                 return {"message":f"book_id tidak terdaftar di database"}
-            # print(b)
+            
+            #validasi jumlah buku terhadap stok
+            if b.stok-book["jumlah"]<0:
+                return {"message":f'You need {book["jumlah"]} {"items" if book["jumlah"] >1 else "item"} of book "{b.judul}", but only {b.stok} available.'}
             detail=DetailPinjaman(peminjaman_id=peminjaman.peminjaman_id,
                                   buku_id=book["buku_id"],
                                   jumlah=book["jumlah"])
             peminjaman.detail_peminjaman.append(detail)
+            #saat commit apakah semua dicommit? atau hanya yang terakhir?
+            b.stok=b.stok-book["jumlah"] 
             print(detail.book)
             
 

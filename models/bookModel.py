@@ -9,6 +9,7 @@ class Book(db.Model):
     judul:Mapped[str] = mapped_column(db.String, nullable=False)
     jumlah_halaman:Mapped[str] = mapped_column(db.String, nullable=False)
     tahun:Mapped[datetime.date] = mapped_column(db.Date,nullable=False)
+    stok:Mapped[str] = mapped_column(db.Integer, nullable=False,default=1)
     kategori_id: Mapped[int] = mapped_column(ForeignKey("kategori.kategori_id"))
     
     authors = db.relationship('Author', secondary=author_book, lazy='subquery',

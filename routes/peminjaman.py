@@ -6,9 +6,12 @@ from flask import request,g
 @blueprint.route("/peminjaman/<int:id>", methods=['GET',"DELETE"])
 def peminjaman(id=None):
     method=request.method
+    q=request.args.get('dikembalikan')
+    # print(q)
     if method=="GET":
         if id==None:
-            result=peminjamanController.getAll()
+            print(q)
+            result=peminjamanController.getAll(dikembalikan=q)
         else:
             result=peminjamanController.getById(id)
         return result

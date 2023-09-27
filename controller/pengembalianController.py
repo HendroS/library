@@ -1,4 +1,4 @@
-from models import Pengembalian
+from models import Pengembalian,Book,DetailPinjaman
 from . import db
 import datetime
 
@@ -82,6 +82,20 @@ def create(peminjaman_id:int,petugas_id:int):
                                    petugas_id=petugas_id
                                    )
         db.session.add(pengembalian)
+        
+        #get daftar buku dari detail pengembalian 
+        details= DetailPinjaman().query.filter_by(peminjaman_id=peminjaman_id).all()
+        for detail in details:
+            
+            #apakah benar satu per satu? atau biki array of book lalu dicommit bersama?
+            book=Book.query.filter_by(detail.buku_id).first()
+            #harusnya tidak perlu karena sudah pasti valid saat buat data peminjaman, kecuali database buku didelete
+            if book==None:
+                return {"message": f"buku id :{detail.buku_id} tidak ditemukan"},400
+
+            book.stok=book.stok+detail.jumlah
+
+
         db.session.commit()
     except Exception as e:
         print(e)
