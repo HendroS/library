@@ -7,7 +7,7 @@ from flask import request,g
 def author(id=None):
     method=request.method
     
-    g.auth.setAuthorization(['admin','member'])
+    g.auth.setAllowed(['admin','member'])
     if method=="GET":
         if id==None:
             author=authorController.getAll()
@@ -15,7 +15,7 @@ def author(id=None):
             author=authorController.getById(id)
         return author
     
-    g.auth.setAuthorization['admin']
+    g.auth.setAllowed['admin']
     if method=="DELETE":
         result= authorController.deleteById(id)
         return result

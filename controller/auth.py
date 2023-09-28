@@ -8,8 +8,9 @@ class Auth():
     def __init__(self,roles:[str]=[]) -> None:
         self.user=None
         self.authorized=False
+        self.err_message=''
         self.__isAuth()
-        self.setAuthorization(roles)
+        self.setAllowed(roles)
 
     def __isAuth(self)->None:
         credential=request.authorization
@@ -17,26 +18,29 @@ class Auth():
             username=credential.parameters['username']
             password=credential.parameters['password']
             user=User().query.filter_by(username=username).first()
+                
             if user!=None:
                 isMatch=bcrypt.checkpw(password.encode('utf-8'),user.password.encode('utf-8'))
                 if isMatch==True:
                     self.user={"username":user.username,
                                "role":"admin" if user.isadmin ==True else "member"}
-            #     else:
-            #         print("wrong pass")
-            # else:print ('not registered')
+                else:
+                    self.err_message='wrong password'
+            else:
+                self.err_message='username is not exist'
     
-    def setAuthorization(self,roles:[str]=[]):
+    def setAllowed(self,roles:[str]=[]):
         if self.user!=None:
             if len(roles)==0 or self.user["role"] in roles:
                 self.authorized=True
             else:
+                self.err_message='Not Allowed'
                 self.authorized=False
-                abort(401)
+                abort(401,self.err_message)
         elif len(roles)==0:
             self.authorized=True
         else:
-            abort(401)
+            abort(401,self.err_message)
 
 
 

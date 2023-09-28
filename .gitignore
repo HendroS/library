@@ -61,6 +61,8 @@ coverage.xml
 .pytest_cache/
 cover/
 
+cobabycrypt.py
+
 # Translations
 *.mo
 *.pot

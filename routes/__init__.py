@@ -18,5 +18,7 @@ from . import pengembalian
 
 @blueprint.errorhandler(401)
 def custom_401(error):
-    return{'message':'unauthorized'},401
+    # print(error.description)
+    return{'message':'unauthorized',
+           'description':error.description},401
 

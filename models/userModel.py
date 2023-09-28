@@ -7,6 +7,7 @@ class User(db.Model):
     username:Mapped[str] = mapped_column(db.String, nullable=False,unique=True)
     password:Mapped[str] = mapped_column(db.String(60), nullable=False)
     isadmin: Mapped[bool] = mapped_column(db.Boolean,nullable=False,default=True)
+    
     peminjaman_members= relationship('Peminjaman',back_populates='member',foreign_keys='Peminjaman.user_id')
     petugas=relationship('Peminjaman',back_populates='petugas',foreign_keys='Peminjaman.petugas_id')
     # peminjaman_petugas= db.relationship('Peminjaman',back_populates='petugas',foreign_keys='peminjaman.petugas_id')

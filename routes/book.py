@@ -6,7 +6,7 @@ from flask import request,g
 @blueprint.route("/book/<int:id>", methods=['GET',"DELETE","PUT"])
 def book(id=None):
     method=request.method
-    g.auth.setAuthorization(['admin','member'])
+    g.auth.setAllowed(['admin','member'])
     if method=="GET":
         if id==None:
             book=bookController.getAll()   
@@ -14,7 +14,7 @@ def book(id=None):
             book=bookController.getById(id)
         return book
     
-    g.auth.setAuthorization(['admin'])
+    g.auth.setAllowed(['admin'])
     if method =="DELETE":
         result = bookController.deleteById(id)
         return result
