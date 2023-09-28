@@ -1,3 +1,4 @@
+from helpers.utils import checkField
 from . import blueprint
 from controller import peminjamanController
 from flask import request,g
@@ -7,7 +8,10 @@ from flask import request,g
 def peminjaman(id=None):
     method=request.method
     q=request.args.get('dikembalikan')
-    # print(q)
+    method=request.method
+
+    g.auth.setAllowed(['admin'])
+
     if method=="GET":
         if id==None:
             print(q)
@@ -19,26 +23,21 @@ def peminjaman(id=None):
         result= peminjamanController.deleteById(id)
         return result
     if method=="POST":
+        # print(g.auth.user['id'])
         data= request.get_json()
-        required=['petugas_id','user_id','tgl_kembali','books']
-        not_present=[]
-        for key in required:
-            if key not in data.keys():
-                not_present.append(key)
-       
-
+        required=['user_id','tgl_kembali','books']
+        not_present=checkField(required,data)
         if len(not_present)>0:
             return {'error':'Bad Request',
                     'message':", ".join([f"{n} required" for n in not_present])+"."
                     },400
-        # print(data["tgl_kembali"])
         if "keterangan" not in data.keys():
             data["keterangan"]=""
         
         result = peminjamanController.create(
             books=data["books"],
             keterangan=data["keterangan"],
-            petugas_id=data["petugas_id"],
+            petugas_id=g.auth.user['id'],
             tgl_kembali=data["tgl_kembali"],
             user_id=data["user_id"]    
         )

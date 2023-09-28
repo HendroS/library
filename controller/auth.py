@@ -23,6 +23,7 @@ class Auth():
                 isMatch=bcrypt.checkpw(password.encode('utf-8'),user.password.encode('utf-8'))
                 if isMatch==True:
                     self.user={"username":user.username,
+                               "id":user.user_id,
                                "role":"admin" if user.isadmin ==True else "member"}
                 else:
                     self.err_message='wrong password'

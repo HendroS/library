@@ -1,3 +1,4 @@
+from helpers.utils import checkField
 from . import blueprint
 from controller import categoryController,Auth
 from flask import request,g
@@ -21,18 +22,21 @@ def category(id=None):
         return result
     if method == "PUT":
         data= request.get_json()
-        if 'nama' not in data or 'deskripsi' not in data:
+        not_present=checkField(data=data,required=['nama','deskripsi'])
+        if len(not_present)>0:
             return {'error':'Bad Request',
-                    'message':'kolom nama dan deskripsi harus diisi'
+                    'message':", ".join([f"{n} required" for n in not_present])+"."
                     },400
         result = categoryController.update(id,data['nama'],data['deskripsi'])
         return result
     if method=="POST":
         data= request.get_json()
-        if 'nama' not in data or 'deskripsi' not in data:
+        not_present=checkField(data=data,required=['nama','deskripsi'])
+        if len(not_present)>0:
             return {'error':'Bad Request',
-                    'message':'kolom nama dan deskripsi harus diisi'
+                    'message':", ".join([f"{n} required" for n in not_present])+"."
                     },400
+        
         result = categoryController.create(nama=data['nama'],deskripsi=data['deskripsi'])
         return result
         

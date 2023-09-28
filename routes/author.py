@@ -1,3 +1,4 @@
+from helpers.utils import checkField
 from . import blueprint
 from controller import authorController,Auth
 from flask import request,g
@@ -23,11 +24,8 @@ def author(id=None):
     if method=="POST":
         data= request.get_json()
         required=['nama','kewarganegaraan','tahun_kelahiran']
-        not_present=[]
-        for key in required:
-            if key not in data.keys():
-                not_present.append(key)
-        
+        not_present=checkField(data=data,required=required)
+
         if len(not_present)>0:
             return {'error':'Bad Request',
                     'message':", ".join([f"{n} required" for n in not_present])+"."
@@ -42,11 +40,8 @@ def author(id=None):
     if method == "PUT":
         data= request.get_json()
         required=['nama','kewarganegaraan','tahun_kelahiran']
-        not_present=[]
-        for key in required:
-            if key not in data.keys():
-                not_present.append(key)
-        
+        not_present=checkField(data=data,required=required)
+
         if len(not_present)>0:
             return {'error':'Bad Request',
                     'message':", ".join([f"{n} required" for n in not_present])+"."

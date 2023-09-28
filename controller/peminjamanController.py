@@ -86,6 +86,7 @@ def create(petugas_id,user_id,tgl_kembali,keterangan,books):
                               tgl_kembali=tgl_kembali,
                               keterangan=keterangan
                               )
+
         if len(books)<1:
             return {"message":'buku pinjaman tidak boleh kosong'},400
         db.session.add(peminjaman)
@@ -101,15 +102,16 @@ def create(petugas_id,user_id,tgl_kembali,keterangan,books):
                 return {"message":f"book_id tidak terdaftar di database"}
             
             #validasi jumlah buku terhadap stok
+           
             if b.stok-book["jumlah"]<0:
-                return {"message":f'You need {book["jumlah"]} {"items" if book["jumlah"] >1 else "item"} of book "{b.judul}", but only {b.stok} available.'}
+                return {"message":f'You need {book["jumlah"]} {"items" if book["jumlah"] >1 else "item"} of book `{b.judul}`, but only {b.stok} available.'}
             detail=DetailPinjaman(peminjaman_id=peminjaman.peminjaman_id,
                                   buku_id=book["buku_id"],
                                   jumlah=book["jumlah"])
             peminjaman.detail_peminjaman.append(detail)
             #saat commit apakah semua dicommit? atau hanya yang terakhir?
             b.stok=b.stok-book["jumlah"] 
-            print(detail.book)
+            # print(detail.book)
             
 
         print(peminjaman.detail_peminjaman)
