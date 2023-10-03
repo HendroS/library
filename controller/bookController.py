@@ -1,6 +1,9 @@
+import json
+from flask import jsonify
 from models import Book
 from models import Author
 from . import db
+from sqlalchemy import text
 
 books=Book()
 
@@ -22,6 +25,7 @@ def getById(id:int):
 def getAll():
     try:
         result=books.query.all()
+     
     except Exception as e:
         print(e)
         return {'message':'error while get books'}
@@ -33,6 +37,19 @@ def getAll():
         "stok":book.stok,
         "kategori":book.category.nama,
         "authors":[c.nama for c in book.authors]} for book in result]}
+
+def getFavorites(numbers=5):
+    q=text(f"SELECT b.judul, count(d.buku_id) jumlah_peminjaman FROM detail_pinjaman d\
+           JOIN buku b on d.buku_id = b.buku_id\
+           GROUP BY b.judul\
+           ORDER BY jumlah_peminjaman DESC\
+           LIMIT {numbers}")
+    result= db.engine.connect().execute(q).mappings().all()
+
+    r=[dict(el) for el in result]
+    
+    return {"favorites_book":r}
+
 
 def deleteById(id:int):
     try:
@@ -64,6 +81,7 @@ def create(judul:str,jumlah_halaman:int,tahun:str,kategori_id:int,authors_id:[in
             if a== None:
                 return {"message":f'author id : {id} not found'},400
             book.authors.append(a)
+        db.session.commit()
     except Exception as e:
         print(e)
         return {'message':f'error while create new book'},400

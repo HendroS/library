@@ -1,7 +1,7 @@
 from helpers.utils import checkField
 from . import blueprint
 from controller import bookController,Auth
-from flask import request,g
+from flask import render_template, request,g
 
 @blueprint.route("/book", methods=['GET','POST'])
 @blueprint.route("/book/<int:id>", methods=['GET',"DELETE","PUT"])
@@ -11,9 +11,13 @@ def book(id=None):
     if method=="GET":
         if id==None:
             book=bookController.getAll()   
+            
+            # for b in book["books"]:
+            #     print(b)
         else:
             book=bookController.getById(id)
         return book
+        # return render_template('book.html',data=book["books"])
     
     g.auth.setAllowed(['admin'])
     if method =="DELETE":

@@ -15,6 +15,7 @@ from . import book
 from . import user
 from . import peminjaman
 from . import pengembalian
+from . import report
 
 @blueprint.errorhandler(401)
 def custom_401(error):

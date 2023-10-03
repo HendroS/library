@@ -88,7 +88,7 @@ def create(peminjaman_id:int,petugas_id:int):
         for detail in details:
             
             #apakah benar satu per satu? atau biki array of book lalu dicommit bersama?
-            book=Book.query.filter_by(detail.buku_id).first()
+            book=Book.query.filter_by(buku_id=detail.buku_id).first()
             #harusnya tidak perlu karena sudah pasti valid saat buat data peminjaman, kecuali database buku didelete
             if book==None:
                 return {"message": f"buku id :{detail.buku_id} tidak ditemukan"},400

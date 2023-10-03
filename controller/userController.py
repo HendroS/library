@@ -1,3 +1,4 @@
+from sqlalchemy import text
 from models import User
 from . import db,Auth
 import bcrypt
@@ -92,6 +93,16 @@ def update(id:int,username:str,password:str):
     },200
         
 
-        
+def topUser(numbers=5):
+    q=text(f"SELECT u.username, count(p.peminjaman_id) jumlah_peminjaman FROM peminjaman p\
+           JOIN users u on u.user_id = p.user_id\
+           GROUP BY u.username\
+           ORDER BY jumlah_peminjaman DESC\
+           LIMIT {numbers}")
+    result= db.engine.connect().execute(q).mappings().all()
+    r=[dict(x) for x in result]
+    
+
+    return {f"top_{numbers}_frequents":r}    
 
 
